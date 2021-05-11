@@ -9,6 +9,6 @@ package be.ulb.polytech.infoh400project.model;
  *
  * @author Benjamin
  */
-public class NewClass {
+class Adress {
     
 }
