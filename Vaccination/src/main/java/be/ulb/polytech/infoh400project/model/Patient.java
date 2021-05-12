@@ -21,6 +21,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -68,6 +69,15 @@ public class Patient implements Serializable {
     
     public void setIdperson(Person idperson) {
         this.idperson = idperson;
+    }
+    
+    @XmlTransient
+    public List<Vaccination> getVaccinationList() {
+        return VaccinationList;
+    }
+
+    public void setVaccinationList(List<Vaccination> VaccinationList) {
+        this.VaccinationList = VaccinationList;
     }
 
     @Override

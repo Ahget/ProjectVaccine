@@ -7,19 +7,14 @@ package be.ulb.polytech.infoh400project.model;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -27,93 +22,92 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Benjamin
+ * @author ahmed
  */
 @Entity
-@Table(name = "Vaccination")
+@Table(name = "vaccination", catalog = "projet-vaccin", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Vaccination.findAll", query = "SELECT v FROM Vaccination v"),
-    @NamedQuery(name = "Vaccination.findByIDvaccination", query = "SELECT v FROM Vaccination v WHERE v.ID_Vaccination = :ID_Vaccination"),
-    @NamedQuery(name = "Vaccination.findByPatient", query = "SELECT v FROM Vaccination v WHERE v.Patient = :Patient"),
-    @NamedQuery(name = "Vaccination.findByDoctor", query = "SELECT v FROM Vaccination v WHERE v.Doctor = :Doctor"),
-    @NamedQuery(name = "Vaccination.findByVaccin", query = "SELECT v FROM Vaccination v WHERE v.Vaccin = :Vaccin"),
-    @NamedQuery(name = "Vaccination.findByDateTime", query = "SELECT v FROM Vaccination v WHERE v.Date_Time = :Date_Time"),
-    @NamedQuery(name = "Vaccination.findDuplicate", query = "SELECT v FROM Vaccination v WHERE v.Patient = :Patient AND p.Vaccin = :Vaccin")})
-
+    @NamedQuery(name = "Vaccination.findByIDVaccination", query = "SELECT v FROM Vaccination v WHERE v.iDVaccination = :iDVaccination"),
+    @NamedQuery(name = "Vaccination.findByDataTime", query = "SELECT v FROM Vaccination v WHERE v.dataTime = :dataTime"),
+    @NamedQuery(name = "Vaccination.findByState", query = "SELECT v FROM Vaccination v WHERE v.state = :state")})
 public class Vaccination implements Serializable {
-    
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "ID_Vaccination")
-    private Integer idvaccination;
-    @JoinColumn(name = "Patient", referencedColumnName = "ID_Patient")
-    @ManyToOne(optional = false)
-    private Person patient;
-    @JoinColumn(name = "Doctor", referencedColumnName = "ID_Doctor")
-    @ManyToOne(optional = false)
-    private Person doctor;
-    @JoinColumn(name = "Vaccin", referencedColumnName = "ID_Vaccin")
-    @ManyToOne(optional = false)
-    private Person vaccin;
-    @Column(name = "Date_Time")
-    @Temporal(TemporalType.DATE)
-    private Date date_time;
-    @Column(name = "State")
-    private Boolean state;
-    
-    public void Vaccination(){
-        
+    @Column(name = "ID_Vaccination", nullable = false)
+    private Integer iDVaccination;
+    @Basic(optional = false)
+    @Column(name = "data-time", nullable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dataTime;
+    @Basic(optional = false)
+    @Column(name = "State", nullable = false)
+    private short state;
+
+    public Vaccination() {
     }
 
-    public Integer getIdvaccination() {
-        return idvaccination;
+    public Vaccination(Integer iDVaccination) {
+        this.iDVaccination = iDVaccination;
     }
 
-    public void setIdvaccination(Integer idvaccination) {
-        this.idvaccination = idvaccination;
+    public Vaccination(Integer iDVaccination, Date dataTime, short state) {
+        this.iDVaccination = iDVaccination;
+        this.dataTime = dataTime;
+        this.state = state;
     }
 
-    public Person getPatient() {
-        return patient;
+    public Integer getIDVaccination() {
+        return iDVaccination;
     }
 
-    public void setPatient(Person patient) {
-        this.patient = patient;
+    public void setIDVaccination(Integer iDVaccination) {
+        this.iDVaccination = iDVaccination;
     }
 
-    public Person getDoctor() {
-        return doctor;
+    public Date getDataTime() {
+        return dataTime;
     }
 
-    public void setDoctor(Person doctor) {
-        this.doctor = doctor;
+    public void setDataTime(Date dataTime) {
+        this.dataTime = dataTime;
     }
 
-    public Person getVaccin() {
-        return vaccin;
-    }
-
-    public void setVaccin(Person vaccin) {
-        this.vaccin = vaccin;
-    }
-
-    public Date getDate_time() {
-        return date_time;
-    }
-
-    public void setDate_time(Date date_time) {
-        this.date_time = date_time;
-    }
-
-    public Boolean getState() {
+    public short getState() {
         return state;
     }
 
-    public void setState(Boolean state) {
+    public void setState(short state) {
         this.state = state;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 0;
+        hash += (iDVaccination != null ? iDVaccination.hashCode() : 0);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        // TODO: Warning - this method won't work in the case the id fields are not set
+        if (!(object instanceof Vaccination)) {
+            return false;
+        }
+        Vaccination other = (Vaccination) object;
+        if ((this.iDVaccination == null && other.iDVaccination != null) || (this.iDVaccination != null && !this.iDVaccination.equals(other.iDVaccination))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "be.ulb.polytech.infoh400project.controller.Vaccination[ iDVaccination=" + iDVaccination + " ]";
     }
     
 }
