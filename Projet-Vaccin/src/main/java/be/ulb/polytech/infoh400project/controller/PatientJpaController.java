@@ -5,6 +5,7 @@
  */
 package be.ulb.polytech.infoh400project.controller;
 
+import be.ulb.polytech.infoh400project.controller.exceptions.IllegalOrphanException;
 import be.ulb.polytech.infoh400project.controller.exceptions.NonexistentEntityException;
 import be.ulb.polytech.infoh400project.model.Patient;
 import java.io.Serializable;
@@ -51,8 +52,8 @@ public class PatientJpaController implements Serializable {
             }
             List<Vaccination> attachedVaccinationList = new ArrayList<Vaccination>();
             for (Vaccination VaccinationListVaccinationToAttach : patient.getVaccinationList()) {
-                //VaccinationListVaccinationToAttach = em.getReference( VaccinationListVaccinationToAttach.getState(), VaccinationListVaccinationToAttach.getIDVaccination());
-                //attachedVaccinationList.add(VaccinationListVaccinationToAttach);
+                VaccinationListVaccinationToAttach = em.getReference( VaccinationListVaccinationToAttach.getClass(), VaccinationListVaccinationToAttach.getIDVaccination());
+                attachedVaccinationList.add(VaccinationListVaccinationToAttach);
             }
             patient.setVaccinationList(attachedVaccinationList);
             em.persist(patient);
@@ -60,6 +61,17 @@ public class PatientJpaController implements Serializable {
                 idperson.getPatientList().add(patient);
                 idperson = em.merge(idperson);
             }
+            
+            for (Vaccination vaccinationListVaccination : patient.getVaccinationList()) {
+                Patient oldIdpatientOfVaccinationListVaccination = vaccinationListVaccination.getIDPatient();
+                vaccinationListVaccination.setIDPatient(patient);
+                vaccinationListVaccination = em.merge(vaccinationListVaccination);
+                if (oldIdpatientOfVaccinationListVaccination != null) {
+                    oldIdpatientOfVaccinationListVaccination.getVaccinationList().remove(vaccinationListVaccination);
+                    oldIdpatientOfVaccinationListVaccination = em.merge(oldIdpatientOfVaccinationListVaccination);
+                }
+            }
+            
             em.getTransaction().commit();
         } finally {
             if (em != null) {
@@ -68,7 +80,7 @@ public class PatientJpaController implements Serializable {
         }
     }
 
-    public void edit(Patient patient) throws NonexistentEntityException, Exception {
+    public void edit(Patient patient) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -76,10 +88,31 @@ public class PatientJpaController implements Serializable {
             Patient persistentPatient = em.find(Patient.class, patient.getIDPatient());
             Person idpersonOld = persistentPatient.getIdperson();
             Person idpersonNew = patient.getIdperson();
+            List<Vaccination> vaccinationListOld = persistentPatient.getVaccinationList();
+            List<Vaccination> vaccinationListNew = patient.getVaccinationList();
+            List<String> illegalOrphanMessages = null;
+            for (Vaccination vaccinationListOldVaccination : vaccinationListOld) {
+                if (!vaccinationListNew.contains(vaccinationListOldVaccination)) {
+                    if (illegalOrphanMessages == null) {
+                        illegalOrphanMessages = new ArrayList<String>();
+                    }
+                    illegalOrphanMessages.add("You must retain vaccination " + vaccinationListOldVaccination + " since its idpatient field is not nullable.");
+                }
+            }
+            if (illegalOrphanMessages != null) {
+                throw new IllegalOrphanException(illegalOrphanMessages);
+            }
             if (idpersonNew != null) {
                 idpersonNew = em.getReference(idpersonNew.getClass(), idpersonNew.getIdperson());
                 patient.setIdperson(idpersonNew);
             }
+            List<Vaccination> attachedVaccinationListNew = new ArrayList<Vaccination>();
+            for (Vaccination vaccinationListNewVaccinationToAttach : vaccinationListNew) {
+                vaccinationListNewVaccinationToAttach = em.getReference(vaccinationListNewVaccinationToAttach.getClass(), vaccinationListNewVaccinationToAttach.getIDVaccination());
+                attachedVaccinationListNew.add(vaccinationListNewVaccinationToAttach);
+            }
+            vaccinationListNew = attachedVaccinationListNew;
+            patient.setVaccinationList(vaccinationListNew);
             patient = em.merge(patient);
             if (idpersonOld != null && !idpersonOld.equals(idpersonNew)) {
                 idpersonOld.getPatientList().remove(patient);
@@ -88,6 +121,17 @@ public class PatientJpaController implements Serializable {
             if (idpersonNew != null && !idpersonNew.equals(idpersonOld)) {
                 idpersonNew.getPatientList().add(patient);
                 idpersonNew = em.merge(idpersonNew);
+            }
+            for (Vaccination vaccinationListNewVaccination : vaccinationListNew) {
+                if (!vaccinationListOld.contains(vaccinationListNewVaccination)) {
+                    Patient oldIdpatientOfVaccinationListNewVaccination = vaccinationListNewVaccination.getIDPatient();
+                    vaccinationListNewVaccination.setIDPatient(patient);
+                    vaccinationListNewVaccination = em.merge(vaccinationListNewVaccination);
+                    if (oldIdpatientOfVaccinationListNewVaccination != null && !oldIdpatientOfVaccinationListNewVaccination.equals(patient)) {
+                        oldIdpatientOfVaccinationListNewVaccination.getVaccinationList().remove(vaccinationListNewVaccination);
+                        oldIdpatientOfVaccinationListNewVaccination = em.merge(oldIdpatientOfVaccinationListNewVaccination);
+                    }
+                }
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
@@ -106,7 +150,7 @@ public class PatientJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException {
+    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -176,6 +220,19 @@ public class PatientJpaController implements Serializable {
         } finally {
             em.close();
         }
+    }
+    
+    public List<Patient> findPatientsByFamilyName(String familyName){
+        EntityManager em = getEntityManager();
+        List<Person> persons = em.createNamedQuery("Person.findByFamilyname").setParameter("familyname", familyName).getResultList();
+        List<Patient> patients = new ArrayList();
+        
+        for( Person p : persons ){
+            if( p.getPatientList().size() > 0 )
+                patients.add( p.getPatientList().get(0) );
+        } 
+        
+        return patients;
     }
     
 }

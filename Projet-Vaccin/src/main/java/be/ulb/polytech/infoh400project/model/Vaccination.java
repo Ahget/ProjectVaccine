@@ -13,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -47,6 +49,8 @@ public class Vaccination implements Serializable {
     @Basic(optional = false)
     @Column(name = "State", nullable = false)
     private short state;
+    @Column(name = "ID_Patient", nullable = false)
+    private Patient iDPatient;
 
     public Vaccination() {
     }
@@ -84,6 +88,16 @@ public class Vaccination implements Serializable {
     public void setState(short state) {
         this.state = state;
     }
+    
+    public Patient getIDPatient() {
+        return iDPatient;
+    }
+
+    public void setIDPatient(Patient idpatient) {
+        this.iDPatient = idpatient;
+    }
+    
+    
 
     @Override
     public int hashCode() {
@@ -109,5 +123,7 @@ public class Vaccination implements Serializable {
     public String toString() {
         return "be.ulb.polytech.infoh400project.controller.Vaccination[ iDVaccination=" + iDVaccination + " ]";
     }
+
+   
     
 }
