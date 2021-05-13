@@ -51,8 +51,8 @@ public class PatientJpaController implements Serializable {
             }
             List<Vaccination> attachedVaccinationList = new ArrayList<Vaccination>();
             for (Vaccination VaccinationListVaccinationToAttach : patient.getVaccinationList()) {
-                VaccinationListVaccinationToAttach = em.getReference( VaccinationListVaccinationToAttach.getState(), VaccinationListVaccinationToAttach.getIDVaccination());
-                attachedVaccinationList.add(VaccinationListVaccinationToAttach);
+                //VaccinationListVaccinationToAttach = em.getReference( VaccinationListVaccinationToAttach.getState(), VaccinationListVaccinationToAttach.getIDVaccination());
+                //attachedVaccinationList.add(VaccinationListVaccinationToAttach);
             }
             patient.setVaccinationList(attachedVaccinationList);
             em.persist(patient);

@@ -6,7 +6,7 @@
 package be.ulb.polytech.infoh400project.controller;
 
 import be.ulb.polytech.infoh400project.controller.exceptions.NonexistentEntityException;
-import be.ulb.polytech.infoh400project.model.VaccinationBen;
+import be.ulb.polytech.infoh400project.model.Vaccination;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -31,7 +31,7 @@ public class VaccinationJpaController implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(VaccinationBen vaccination) {
+    public void create(Vaccination vaccination) {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -45,7 +45,7 @@ public class VaccinationJpaController implements Serializable {
         }
     }
 
-    public void edit(VaccinationBen vaccination) throws NonexistentEntityException, Exception {
+    public void edit(Vaccination vaccination) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -55,7 +55,7 @@ public class VaccinationJpaController implements Serializable {
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = vaccination.getIdvaccination();
+                Integer id = vaccination.getIDVaccination();
                 if (findVaccination(id) == null) {
                     throw new NonexistentEntityException("The vaccination with id " + id + " no longer exists.");
                 }
@@ -73,10 +73,10 @@ public class VaccinationJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            VaccinationBen vaccination;
+            Vaccination vaccination;
             try {
-                vaccination = em.getReference(VaccinationBen.class, id);
-                vaccination.getIdvaccination();
+                vaccination = em.getReference(Vaccination.class, id);
+                vaccination.getIDVaccination();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The vaccination with id " + id + " no longer exists.", enfe);
             }
@@ -89,19 +89,19 @@ public class VaccinationJpaController implements Serializable {
         }
     }
 
-    public List<VaccinationBen> findVaccinationEntities() {
+    public List<Vaccination> findVaccinationEntities() {
         return findVaccinationEntities(true, -1, -1);
     }
 
-    public List<VaccinationBen> findVaccinationEntities(int maxResults, int firstResult) {
+    public List<Vaccination> findVaccinationEntities(int maxResults, int firstResult) {
         return findVaccinationEntities(false, maxResults, firstResult);
     }
 
-    private List<VaccinationBen> findVaccinationEntities(boolean all, int maxResults, int firstResult) {
+    private List<Vaccination> findVaccinationEntities(boolean all, int maxResults, int firstResult) {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            cq.select(cq.from(VaccinationBen.class));
+            cq.select(cq.from(Vaccination.class));
             Query q = em.createQuery(cq);
             if (!all) {
                 q.setMaxResults(maxResults);
@@ -113,10 +113,10 @@ public class VaccinationJpaController implements Serializable {
         }
     }
 
-    public VaccinationBen findVaccination(Integer id) {
+    public Vaccination findVaccination(Integer id) {
         EntityManager em = getEntityManager();
         try {
-            return em.find(VaccinationBen.class, id);
+            return em.find(Vaccination.class, id);
         } finally {
             em.close();
         }
@@ -126,7 +126,7 @@ public class VaccinationJpaController implements Serializable {
         EntityManager em = getEntityManager();
         try {
             CriteriaQuery cq = em.getCriteriaBuilder().createQuery();
-            Root<VaccinationBen> rt = cq.from(VaccinationBen.class);
+            Root<Vaccination> rt = cq.from(Vaccination.class);
             cq.select(em.getCriteriaBuilder().count(rt));
             Query q = em.createQuery(cq);
             return ((Long) q.getSingleResult()).intValue();
