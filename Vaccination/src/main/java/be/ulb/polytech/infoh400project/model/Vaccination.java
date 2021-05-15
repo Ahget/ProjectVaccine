@@ -52,6 +52,9 @@ public class Vaccination implements Serializable {
     @JoinColumn(name = "Patient", referencedColumnName = "ID_Patient")
     @ManyToOne(optional = false)
     private Patient idpatient;
+    @JoinColumn(name = "Vaccin", referencedColumnName = "ID_Vaccin")
+    @ManyToOne(optional = false)
+    private Vaccin idvaccin;
 
     public Vaccination() {
     }
@@ -112,7 +115,7 @@ public class Vaccination implements Serializable {
 
     @Override
     public String toString() {
-        return "be.ulb.polytech.infoh400project.controller.Vaccination[ iDVaccination=" + iDVaccination + " ]";
+        return "iDVaccination= " + iDVaccination + " idVaccin= " + idvaccin.toString();
     }
     
 }

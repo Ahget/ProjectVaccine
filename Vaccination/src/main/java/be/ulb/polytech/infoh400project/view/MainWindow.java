@@ -28,12 +28,14 @@ public class MainWindow extends javax.swing.JFrame {
     private final PersonJpaController personCtrl = new PersonJpaController(emfac);
     private final DoctorJpaController doctorCtrl = new DoctorJpaController(emfac);
     
-    
+    //List vaccinations =null;
     /**
      * Creates new form Test
      */
     public MainWindow() {
         initComponents();
+        
+        
     }
 
     /**
@@ -72,6 +74,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         jLabel1.setText("Numéro de registre National");
 
+        jListVaccinations.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(jListVaccinations);
 
         jTextArea1.setColumns(20);
@@ -204,9 +207,13 @@ public class MainWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void refreshVaccinationList(){
-        List vaccinations = vaccinationCtrl.findVaccinationEntities();
+    private void refreshVaccinationList(List<Vaccination> vaccinations){
+        //List vaccinations = vaccinationCtrl.findVaccinationEntities();
         EntityListModel<Vaccination> model = new EntityListModel(vaccinations);
+           
+        for(int i = 0; i < model.getSize(); i++) {
+            System.out.println(model.getElementAt(i));
+        }
         
         jListVaccinations.setModel(model);
     }
@@ -223,18 +230,16 @@ public class MainWindow extends javax.swing.JFrame {
         /* doit prendre le numéro inséré dans idField et le set comme étant celui de la personne qu'on regarde, puis affiche les vaccinations correspondantes à cet id */
         /* on pourrait rajouter une condition sur la longueur de l'id si on regarde en fait le numéro de registre national qui a une longueur fixe et non l'idPerson*/
         if (!(idField.getText()).equals("")) { // check si field vide
-            try {
-                Integer selectedId = Integer.parseInt(idField.getText());
-                // reprend l'id du textfield
-                Person selectedPerson = personCtrl.findPerson(selectedId);
-                //Patient selectedPatient = selectedPerson.getPatientList().get(0) ; 
+            try {           
+                Integer selectedId = Integer.parseInt(idField.getText());// reprend l'id du textfield
+                Person selectedPerson = personCtrl.findPerson(selectedId);//Patient selectedPatient = selectedPerson.getPatientList().get(0) ; 
                 /*prends la personne sélectionnée, récupère la liste de patient mappé par son id, récupère le premier élément (normalement il n'y en a qu'un de toute façon) 
                 qui est le patient correspondant */
                 
-                //List<Vaccination> vaccinationList = selectedPatient.getVaccinationList();
+                List<Vaccination> vaccinationList = selectedPerson.getPatientList().get(0).getVaccinationList();
                 
                 
-                refreshVaccinationList();             
+                refreshVaccinationList(vaccinationList);             
             } catch (NumberFormatException e) {
                 System.out.println("User input was not a number.");
             }    

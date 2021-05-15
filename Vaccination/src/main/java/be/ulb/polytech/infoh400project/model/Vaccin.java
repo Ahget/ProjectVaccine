@@ -90,7 +90,7 @@ public class Vaccin implements Serializable {
 
     @Override
     public String toString() {
-        return "be.ulb.polytech.infoh400project.model.Vaccin[ iDVaccin=" + iDVaccin + " ]";
+        return iDVaccin + " " + nameVaccin;
     }
     
 }
