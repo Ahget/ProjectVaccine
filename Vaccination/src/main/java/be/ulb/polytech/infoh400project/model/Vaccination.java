@@ -13,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -25,13 +27,13 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author ahmed
  */
 @Entity
-@Table(name = "vaccination", catalog = "projet-vaccin", schema = "")
+@Table(name = "vaccination", catalog = "projet_vaccin", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Vaccination.findAll", query = "SELECT v FROM Vaccination v"),
     @NamedQuery(name = "Vaccination.findByIDVaccination", query = "SELECT v FROM Vaccination v WHERE v.iDVaccination = :iDVaccination"),
     @NamedQuery(name = "Vaccination.findByDataTime", query = "SELECT v FROM Vaccination v WHERE v.dataTime = :dataTime"),
-    @NamedQuery(name = "Vaccination.findByState", query = "SELECT v FROM Vaccination v WHERE v.state = :state")})
+    @NamedQuery(name = "Vaccination.findByVaccinationState", query = "SELECT v FROM Vaccination v WHERE v.vaccinationstate = :vaccinationstate")})
 public class Vaccination implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -41,12 +43,15 @@ public class Vaccination implements Serializable {
     @Column(name = "ID_Vaccination", nullable = false)
     private Integer iDVaccination;
     @Basic(optional = false)
-    @Column(name = "data-time", nullable = false)
+    @Column(name = "data_time", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date dataTime;
     @Basic(optional = false)
-    @Column(name = "State", nullable = false)
-    private short state;
+    @Column(name = "VaccinationState", nullable = false)
+    private short vaccinationstate;
+    @JoinColumn(name = "Patient", referencedColumnName = "ID_Patient")
+    @ManyToOne(optional = false)
+    private Patient idpatient;
 
     public Vaccination() {
     }
@@ -55,10 +60,10 @@ public class Vaccination implements Serializable {
         this.iDVaccination = iDVaccination;
     }
 
-    public Vaccination(Integer iDVaccination, Date dataTime, short state) {
+    public Vaccination(Integer iDVaccination, Date dataTime, short vaccinationstate) {
         this.iDVaccination = iDVaccination;
         this.dataTime = dataTime;
-        this.state = state;
+        this.vaccinationstate = vaccinationstate;
     }
 
     public Integer getIDVaccination() {
@@ -77,12 +82,12 @@ public class Vaccination implements Serializable {
         this.dataTime = dataTime;
     }
 
-    public short getState() {
-        return state;
+    public short getVaccinationState() {
+        return vaccinationstate;
     }
 
-    public void setState(short state) {
-        this.state = state;
+    public void setVaccinationState(short vaccinationstate) {
+        this.vaccinationstate = vaccinationstate;
     }
 
     @Override

@@ -5,12 +5,30 @@
  */
 package be.ulb.polytech.infoh400project.view;
 
+import be.ulb.polytech.infoh400project.controller.DoctorJpaController;
+import be.ulb.polytech.infoh400project.controller.PatientJpaController;
+import be.ulb.polytech.infoh400project.controller.PersonJpaController;
+import be.ulb.polytech.infoh400project.controller.VaccinationJpaController;
+import be.ulb.polytech.infoh400project.model.Patient;
+import be.ulb.polytech.infoh400project.model.Person;
+import be.ulb.polytech.infoh400project.model.Vaccination;
+import java.util.List;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 /**
  *
  * @author Benjamin
  */
 public class MainWindow extends javax.swing.JFrame {
 
+    private final EntityManagerFactory emfac = Persistence.createEntityManagerFactory("be.ulb.polytech.infoh400project_Vaccination_jar_1.0-SNAPSHOTPU");
+    private final VaccinationJpaController vaccinationCtrl = new VaccinationJpaController(emfac);
+    private final PatientJpaController patientCtrl = new PatientJpaController(emfac);
+    private final PersonJpaController personCtrl = new PersonJpaController(emfac);
+    private final DoctorJpaController doctorCtrl = new DoctorJpaController(emfac);
+    
+    
     /**
      * Creates new form Test
      */
@@ -27,16 +45,16 @@ public class MainWindow extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTextField1 = new javax.swing.JTextField();
+        idField = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        jListVaccinations = new javax.swing.JList<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        selectPatientButton = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
@@ -46,20 +64,15 @@ public class MainWindow extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        idField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                idFieldActionPerformed(evt);
             }
         });
 
         jLabel1.setText("Numéro de registre National");
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane1.setViewportView(jList1);
+        jScrollPane1.setViewportView(jListVaccinations);
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -76,7 +89,12 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setText("Select Patient");
+        selectPatientButton.setText("Select Patient");
+        selectPatientButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectPatientButtonActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Edit Patient");
 
@@ -107,9 +125,9 @@ public class MainWindow extends javax.swing.JFrame {
                         .addGap(64, 64, 64)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(idField, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(30, 30, 30)
-                                .addComponent(jButton3))
+                                .addComponent(selectPatientButton))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(1, 1, 1)
                                 .addComponent(jButton4))))
@@ -154,8 +172,8 @@ public class MainWindow extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jButton3))
+                                    .addComponent(idField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(selectPatientButton))
                                 .addGap(48, 48, 48)
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -186,13 +204,42 @@ public class MainWindow extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void refreshVaccinationList(){
+        List vaccinations = vaccinationCtrl.findVaccinationEntities();
+        EntityListModel<Vaccination> model = new EntityListModel(vaccinations);
+        
+        jListVaccinations.setModel(model);
+    }
+    
+    private void idFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_idFieldActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void selectPatientButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectPatientButtonActionPerformed
+        /* doit prendre le numéro inséré dans idField et le set comme étant celui de la personne qu'on regarde, puis affiche les vaccinations correspondantes à cet id */
+        /* on pourrait rajouter une condition sur la longueur de l'id si on regarde en fait le numéro de registre national qui a une longueur fixe et non l'idPerson*/
+        if (!(idField.getText()).equals("")) { // check si field vide
+            try {
+                Integer selectedId = Integer.parseInt(idField.getText());
+                // reprend l'id du textfield
+                Person selectedPerson = personCtrl.findPerson(selectedId);
+                //Patient selectedPatient = selectedPerson.getPatientList().get(0) ; 
+                /*prends la personne sélectionnée, récupère la liste de patient mappé par son id, récupère le premier élément (normalement il n'y en a qu'un de toute façon) 
+                qui est le patient correspondant */
+                
+                //List<Vaccination> vaccinationList = selectedPatient.getVaccinationList();
+                
+                
+                refreshVaccinationList();             
+            } catch (NumberFormatException e) {
+                System.out.println("User input was not a number.");
+            }    
+        }
+    }//GEN-LAST:event_selectPatientButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -229,11 +276,11 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
     }
-
+   
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField idField;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -242,10 +289,10 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JList<String> jList1;
+    private javax.swing.JList<String> jListVaccinations;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JButton selectPatientButton;
     // End of variables declaration//GEN-END:variables
 }

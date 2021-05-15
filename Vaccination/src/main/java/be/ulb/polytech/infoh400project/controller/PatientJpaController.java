@@ -178,4 +178,18 @@ public class PatientJpaController implements Serializable {
         }
     }
     
+    public Patient findPatientByIdPerson(Integer id){ //p-e un peu brouillon, surement moyen de faire plus propre
+        EntityManager em = getEntityManager();
+        List<Person> persons = em.createNamedQuery("Person.findByIdPerson").setParameter("idperson", id).getResultList();
+        List<Patient> patients = new ArrayList();
+        
+        for( Person p : persons ){
+            if( p.getPatientList().size() > 0 )
+                patients.add( p.getPatientList().get(0) );
+        } 
+        Patient patient = patients.get(0);
+        
+        return patient;
+    }
+    
 }

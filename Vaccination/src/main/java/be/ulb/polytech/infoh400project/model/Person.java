@@ -29,18 +29,18 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 
 @Entity
-@Table(name = "Person")
+@Table(name = "person", catalog = "projet_vaccin", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Person.findAll", query = "SELECT p FROM Person p"),
-    @NamedQuery(name = "Person.findByIdperson", query = "SELECT p FROM Person p WHERE p.ID_Person = :ID_Person"),
-    @NamedQuery(name = "Person.findByIdcard", query = "SELECT p FROM Person p WHERE p.ID_Card = :ID_Card"),
-    @NamedQuery(name = "Person.findByName", query = "SELECT p FROM Person p WHERE p.Name = :Name"),
-    @NamedQuery(name = "Person.findBySurname", query = "SELECT p FROM Person p WHERE p.Surname = :Surname"),
-    @NamedQuery(name = "Person.findByDateofbirth", query = "SELECT p FROM Person p WHERE p.Date_Of_Birth = :Date_Of_Birth"),
-    @NamedQuery(name = "Person.findByPhonenumber", query = "SELECT p FROM Person p WHERE p.Phone_Number = :Phone_Number"),
-    @NamedQuery(name = "Person.findByEmail", query = "SELECT p FROM Person p WHERE p.Email = :Email"),
-    @NamedQuery(name = "Person.findDuplicate", query = "SELECT p FROM Person p WHERE p.Name = :firstname AND p.Surname = :Surname AND p.Date_Of_Birth = :Date_Of_Birth")})
+    @NamedQuery(name = "Person.findByIdperson", query = "SELECT p FROM Person p WHERE p.idperson = :idperson"),
+    //@NamedQuery(name = "Person.findByIdcard", query = "SELECT p FROM Person p WHERE p.ID_Card = :ID_Card"),
+    @NamedQuery(name = "Person.findByName", query = "SELECT p FROM Person p WHERE p.name = :name"),
+    @NamedQuery(name = "Person.findBySurname", query = "SELECT p FROM Person p WHERE p.surname = :surname"),
+    @NamedQuery(name = "Person.findByDateofbirth", query = "SELECT p FROM Person p WHERE p.dateofbirth = :dateofbirth"),
+    @NamedQuery(name = "Person.findByPhonenumber", query = "SELECT p FROM Person p WHERE p.phonenumber = :phonenumber"),
+    @NamedQuery(name = "Person.findByEmail", query = "SELECT p FROM Person p WHERE p.email = :email"),
+    @NamedQuery(name = "Person.findDuplicate", query = "SELECT p FROM Person p WHERE p.name = :name AND p.surname = :surname AND p.dateofbirth = :dateofbirth")})
 
 public class Person implements Serializable{
     
@@ -64,9 +64,9 @@ public class Person implements Serializable{
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idperson")
     private List<Patient> patientList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idperson")
-    private List<Doctor> doctortList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idperson")
-    private List<Adress> AdressList;
+    private List<Doctor> doctorList;
+    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "idperson")          //il faut plutôt les link Person-Adress non?
+    //private List<Adress> AdressList;
     
     
     public void Person(){
@@ -127,6 +127,13 @@ public class Person implements Serializable{
 
     public void setPatientList(List<Patient> patientList) {
         this.patientList = patientList;
+    }
+    public List<Doctor> getDoctorList() {
+        return doctorList;
+    }
+
+    public void setDoctorList(List<Doctor> doctorList) {
+        this.doctorList = doctorList;
     }
     
 }

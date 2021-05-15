@@ -12,8 +12,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -22,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author ahmed
  */
 @Entity
-@Table(name = "doctor", catalog = "projet-vaccin", schema = "")
+@Table(name = "doctor", catalog = "projet_vaccin", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Doctor.findAll", query = "SELECT d FROM Doctor d"),
@@ -35,6 +38,9 @@ public class Doctor implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID_Doctor", nullable = false)
     private Integer iDDoctor;
+    @JoinColumn(name = "Person", referencedColumnName = "ID_Person")
+    @ManyToOne(optional = false)
+    private Person idperson;
 
     public Doctor() {
     }
