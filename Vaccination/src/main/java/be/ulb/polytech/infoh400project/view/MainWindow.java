@@ -13,8 +13,8 @@ import be.ulb.polytech.infoh400project.controller.exceptions.NonexistentEntityEx
 import be.ulb.polytech.infoh400project.model.Patient;
 import be.ulb.polytech.infoh400project.model.Person;
 import be.ulb.polytech.infoh400project.model.Vaccination;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -76,6 +76,7 @@ public class MainWindow extends javax.swing.JFrame {
         ageTextField = new javax.swing.JTextField();
         adresseTextField = new javax.swing.JTextField();
         saveButton = new javax.swing.JButton();
+        FhirSearchButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -146,6 +147,13 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
 
+        FhirSearchButton.setText("Search");
+        FhirSearchButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                FhirSearchButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -196,7 +204,9 @@ public class MainWindow extends javax.swing.JFrame {
                                 .addComponent(prenomTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(28, 28, 28)
-                        .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(FhirSearchButton, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(saveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 73, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 408, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(24, 24, 24)
@@ -256,7 +266,9 @@ public class MainWindow extends javax.swing.JFrame {
                                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(50, 50, 50)
-                                .addComponent(saveButton))))
+                                .addComponent(saveButton)))
+                        .addGap(88, 88, 88)
+                        .addComponent(FhirSearchButton))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(39, 39, 39)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -282,6 +294,15 @@ public class MainWindow extends javax.swing.JFrame {
     }
     
     public void updatePatient(){
+        if( patient == null ){
+            patient = new Patient();
+        }
+        
+        patient.setIdperson(getPerson());
+        
+    }
+    
+    public Person getPerson(){
         if( person == null ){
             person = new Person();
         }
@@ -289,10 +310,14 @@ public class MainWindow extends javax.swing.JFrame {
         person.setSurname(nomTextField.getText());
         person.setName(prenomTextField.getText());
         person.setPhonenumber(telTextField.getText());
-        //person.setDateofbirth( (Date) ageTextField.getText());
-        // faire l'adresse
+        try {
+            person.setDateofbirth(fmt.parse(ageTextField.getText()));
+        } catch (ParseException ex) {
+            Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
+            
+        }
         
-        
+        return person;
     }
     
     
@@ -315,10 +340,10 @@ public class MainWindow extends javax.swing.JFrame {
                 /*prends la personne sélectionnée, récupère la liste de patient mappé par son id, récupère le premier élément (normalement il n'y en a qu'un de toute façon) 
                 qui est le patient correspondant */
                 person = selectedPerson;
-                List<Vaccination> vaccinationList = selectedPerson.getPatientList().get(0).getVaccinationList();
+                //List<Vaccination> vaccinationList = selectedPerson.getPatientList().get(0).getVaccinationList();
                 
                 
-                refreshVaccinationList(vaccinationList);             
+                //refreshVaccinationList(vaccinationList);             
             } catch (NumberFormatException e) {
                 System.out.println("User input was not a number.");
             }   
@@ -358,9 +383,13 @@ public class MainWindow extends javax.swing.JFrame {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        this.dispose();        
+        //this.dispose();        
     
     }//GEN-LAST:event_saveButtonActionPerformed
+
+    private void FhirSearchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FhirSearchButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_FhirSearchButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -399,6 +428,7 @@ public class MainWindow extends javax.swing.JFrame {
     }
    
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton FhirSearchButton;
     private javax.swing.JTextField adresseTextField;
     private javax.swing.JTextField ageTextField;
     private javax.swing.JTextField idField;

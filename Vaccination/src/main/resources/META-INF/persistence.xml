@@ -10,9 +10,6 @@
     <class>be.ulb.polytech.infoh400project.model.Stock</class>
     <class>be.ulb.polytech.infoh400project.model.VaccinationPlace</class>
     <class>be.ulb.polytech.infoh400project.model.LinkPersonAdress</class>
-    <class>be.ulb.polytech.infoh400project.controller.Person</class>
-    <class>be.ulb.polytech.infoh400project.controller.exceptions.Person</class>
-    <class>be.ulb.polytech.infoh400project.model.VaccinationBen</class>
     <class>be.ulb.polytech.infoh400project.model.Vaccination</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/projet_vaccin?zeroDateTimeBehavior=CONVERT_TO_NULL"/>

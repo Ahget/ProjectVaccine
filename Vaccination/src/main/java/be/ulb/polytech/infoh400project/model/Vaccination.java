@@ -92,6 +92,14 @@ public class Vaccination implements Serializable {
     public void setVaccinationState(short vaccinationstate) {
         this.vaccinationstate = vaccinationstate;
     }
+    
+    public Patient getIDPatient() {
+        return idpatient;
+    }
+
+    public void setIDPatient(Patient idpatient) {
+        this.idpatient = idpatient;
+    }
 
     @Override
     public int hashCode() {

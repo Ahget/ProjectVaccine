@@ -51,14 +51,24 @@ public class PatientJpaController implements Serializable {
             }
             List<Vaccination> attachedVaccinationList = new ArrayList<Vaccination>();
             for (Vaccination VaccinationListVaccinationToAttach : patient.getVaccinationList()) {
-                //VaccinationListVaccinationToAttach = em.getReference( VaccinationListVaccinationToAttach.getState(), VaccinationListVaccinationToAttach.getIDVaccination());
-                //attachedVaccinationList.add(VaccinationListVaccinationToAttach);
+                VaccinationListVaccinationToAttach = em.getReference( VaccinationListVaccinationToAttach.getClass(), VaccinationListVaccinationToAttach.getIDVaccination());
+                attachedVaccinationList.add(VaccinationListVaccinationToAttach);
             }
             patient.setVaccinationList(attachedVaccinationList);
             em.persist(patient);
             if (idperson != null) {
                 idperson.getPatientList().add(patient);
                 idperson = em.merge(idperson);
+            }
+            
+            for (Vaccination vaccinationListVaccination : patient.getVaccinationList()) {
+                Patient oldIdpatientOfVaccinationListVaccination = vaccinationListVaccination.getIDPatient();
+                vaccinationListVaccination.setIDPatient(patient);
+                vaccinationListVaccination = em.merge(vaccinationListVaccination);
+                if (oldIdpatientOfVaccinationListVaccination != null) {
+                    oldIdpatientOfVaccinationListVaccination.getVaccinationList().remove(vaccinationListVaccination);
+                    oldIdpatientOfVaccinationListVaccination = em.merge(oldIdpatientOfVaccinationListVaccination);
+                }
             }
             em.getTransaction().commit();
         } finally {
@@ -76,6 +86,9 @@ public class PatientJpaController implements Serializable {
             Patient persistentPatient = em.find(Patient.class, patient.getIDPatient());
             Person idpersonOld = persistentPatient.getIdperson();
             Person idpersonNew = patient.getIdperson();
+            List<Vaccination> vaccinationListOld = persistentPatient.getVaccinationList();
+            List<Vaccination> vaccinationListNew = patient.getVaccinationList();
+            List<String> illegalOrphanMessages = null;
             if (idpersonNew != null) {
                 idpersonNew = em.getReference(idpersonNew.getClass(), idpersonNew.getIdperson());
                 patient.setIdperson(idpersonNew);

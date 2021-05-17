@@ -41,6 +41,9 @@ public class Patient implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID_Patient", nullable = false)
     private Integer iDPatient;
+    @Basic(optional = true)
+    @Column(name = "Doctor", nullable = false)
+    private Doctor iDdoctor;
     @JoinColumn(name = "Person", referencedColumnName = "ID_Person")
     @ManyToOne(optional = false)
     private Person idperson;
@@ -69,6 +72,14 @@ public class Patient implements Serializable {
     
     public void setIdperson(Person idperson) {
         this.idperson = idperson;
+    }
+    
+    public Doctor getIddoctor() {
+        return iDdoctor;
+    }
+    
+    public void setIddoctor(Doctor iDdoctor) {
+        this.iDdoctor = iDdoctor;
     }
     
     @XmlTransient

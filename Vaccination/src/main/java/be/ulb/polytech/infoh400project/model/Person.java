@@ -50,6 +50,9 @@ public class Person implements Serializable{
     @Basic(optional = false)
     @Column(name = "ID_Person")
     private Integer idperson;
+    @Basic(optional = true)
+    @Column(name = "ID_Card")
+    private Integer idcard;
     @Column(name = "Name")
     private String name;
     @Column(name = "Surname")
@@ -59,6 +62,7 @@ public class Person implements Serializable{
     private Date dateofbirth;
     @Column(name = "Phone_Number")
     private String phonenumber;
+    @Basic(optional = true)
     @Column(name = "Email")
     private String email;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idperson")
@@ -87,6 +91,14 @@ public class Person implements Serializable{
 
     public void setName(String name) {
         this.name = name;
+    }
+    
+    public String getIdcard() {
+        return name;
+    }
+
+    public void setIdcard(Integer idcard) {
+        this.idcard = idcard;
     }
 
     public String getSurname() {
