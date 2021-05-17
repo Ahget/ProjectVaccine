@@ -383,7 +383,7 @@ public class MainWindow extends javax.swing.JFrame {
             Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        //this.dispose();        
+        //this.dispose();         
     
     }//GEN-LAST:event_saveButtonActionPerformed
 

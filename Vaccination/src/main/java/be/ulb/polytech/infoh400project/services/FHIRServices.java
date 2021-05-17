@@ -34,7 +34,7 @@ public class FHIRServices {
         
         be.ulb.polytech.infoh400project.model.Patient pat = new be.ulb.polytech.infoh400project.model.Patient();
         pat.setIdperson(idperson);
-        pat.setStatus("active");
+        //pat.setStatus("active");
         
         return pat;
     }
