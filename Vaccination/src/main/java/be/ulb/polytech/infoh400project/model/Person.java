@@ -6,6 +6,7 @@
 package be.ulb.polytech.infoh400project.model;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -146,6 +147,13 @@ public class Person implements Serializable{
 
     public void setDoctorList(List<Doctor> doctorList) {
         this.doctorList = doctorList;
+    }
+    
+    @Override
+    public String toString() {
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
+        String dob = dateofbirth == null ? "unknown" : fmt.format(dateofbirth);
+        return surname.toUpperCase() + " " + name + " (" + dob + ")";
     }
     
 }
