@@ -55,6 +55,33 @@ public class Vaccination implements Serializable {
     @JoinColumn(name = "Vaccin", referencedColumnName = "ID_Vaccin")
     @ManyToOne(optional = false)
     private Vaccin idvaccin;
+    @JoinColumn(name = "Doctor", referencedColumnName = "ID_Doctor")
+    @ManyToOne(optional = false)
+    private Doctor iddoctor;
+
+    public Doctor getIddoctor() {
+        return iddoctor;
+    }
+
+    public void setIddoctor(Doctor iddoctor) {
+        this.iddoctor = iddoctor;
+    }
+
+        public Patient getIdpatient() {
+        return idpatient;
+    }
+
+    public void setIdpatient(Patient idpatient) {
+        this.idpatient = idpatient;
+    }
+
+    public Vaccin getIdvaccin() {
+        return idvaccin;
+    }
+
+    public void setIdvaccin(Vaccin idvaccin) {
+        this.idvaccin = idvaccin;
+    }
 
     public Vaccination() {
     }
@@ -123,7 +150,7 @@ public class Vaccination implements Serializable {
 
     @Override
     public String toString() {
-        return "iDVaccination= " + iDVaccination + " idVaccin= " + idvaccin.toString();
+        return "iDVaccination= " + iDVaccination + " Vaccin = " + idvaccin.toString();
     }
     
 }
