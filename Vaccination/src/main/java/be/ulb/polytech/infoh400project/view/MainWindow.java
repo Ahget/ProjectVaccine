@@ -37,6 +37,7 @@ public class MainWindow extends javax.swing.JFrame {
     
     private Person person = null;
     Patient patient = null;
+    Person selectedPerson = null;
     private final SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd");
     
     //List vaccinations =null;
@@ -63,7 +64,7 @@ public class MainWindow extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextAreaInfoVaccin = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        Meeting = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         selectPatientButton = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
@@ -79,6 +80,8 @@ public class MainWindow extends javax.swing.JFrame {
         adresseTextField = new javax.swing.JTextField();
         saveButton = new javax.swing.JButton();
         FhirSearchButton = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel8.setVisible(false);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -105,7 +108,12 @@ public class MainWindow extends javax.swing.JFrame {
 
         jLabel2.setText("Info Vaccin");
 
-        jButton1.setText("Meeting");
+        Meeting.setText("Meeting");
+        Meeting.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MeetingActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Edit Vaccin");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -161,6 +169,9 @@ public class MainWindow extends javax.swing.JFrame {
                 FhirSearchButtonActionPerformed(evt);
             }
         });
+
+        jLabel8.setForeground(new java.awt.Color(255, 51, 51));
+        jLabel8.setText("No patient selected");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -220,15 +231,19 @@ public class MainWindow extends javax.swing.JFrame {
                 .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
                         .addComponent(jLabel2)
                         .addGap(274, 274, 274))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 334, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(20, Short.MAX_VALUE))))
+                        .addContainerGap(20, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(jLabel8))
+                            .addComponent(Meeting, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -271,12 +286,17 @@ public class MainWindow extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(60, 60, 60)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(Meeting, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(50, 50, 50)
                                 .addComponent(saveButton)))
-                        .addGap(88, 88, 88)
-                        .addComponent(FhirSearchButton))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(88, 88, 88)
+                                .addComponent(FhirSearchButton))
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel8))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(39, 39, 39)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 550, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -346,7 +366,7 @@ public class MainWindow extends javax.swing.JFrame {
             
             try {           
                 Integer selectedId = Integer.parseInt(idField.getText());// reprend l'id du textfield
-                Person selectedPerson = personCtrl.findPerson(selectedId);//Patient selectedPatient = selectedPerson.getPatientList().get(0) ; 
+                selectedPerson = personCtrl.findPerson(selectedId);//Patient selectedPatient = selectedPerson.getPatientList().get(0) ; 
                 /*prends la personne sélectionnée, récupère la liste de patient mappé par son id, récupère le premier élément (normalement il n'y en a qu'un de toute façon) 
                 qui est le patient correspondant */
                 person = selectedPerson;
@@ -434,6 +454,18 @@ public class MainWindow extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jListVaccinationsMouseClicked
 
+    private void MeetingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MeetingActionPerformed
+        // TODO add your handling code here:
+        if(selectedPerson != null){
+            jLabel8.setVisible(false);
+            AddMeetingWindow meetingAddPopup = new AddMeetingWindow(selectedPerson);
+            meetingAddPopup.setVisible(true);
+        }
+        else {
+            jLabel8.setVisible(true);
+        }
+    }//GEN-LAST:event_MeetingActionPerformed
+    
     /**
      * @param args the command line arguments
      */
@@ -472,10 +504,10 @@ public class MainWindow extends javax.swing.JFrame {
    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton FhirSearchButton;
+    private javax.swing.JButton Meeting;
     private javax.swing.JTextField adresseTextField;
     private javax.swing.JTextField ageTextField;
     private javax.swing.JTextField idField;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
@@ -485,6 +517,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JList<String> jListVaccinations;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
