@@ -321,6 +321,8 @@ public class MainWindow extends javax.swing.JFrame {
     }
     
     
+    
+    
     private void idFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_idFieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_idFieldActionPerformed
@@ -389,7 +391,9 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_saveButtonActionPerformed
 
     private void FhirSearchButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_FhirSearchButtonActionPerformed
-        // TODO add your handling code here:
+        FHIRSearchWindow fhirSearchPopup = new FHIRSearchWindow();
+        fhirSearchPopup.setVisible(true);
+        //faire avec l'url http://hapi.fhir.org/baseR4 (ça "marche")
     }//GEN-LAST:event_FhirSearchButtonActionPerformed
 
     /**
