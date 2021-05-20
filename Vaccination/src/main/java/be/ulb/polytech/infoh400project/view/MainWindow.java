@@ -121,7 +121,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         jLabel5.setText("tel:");
 
-        jLabel6.setText("Age");
+        jLabel6.setText("DOB");
 
         jLabel7.setText("Adresse");
 
