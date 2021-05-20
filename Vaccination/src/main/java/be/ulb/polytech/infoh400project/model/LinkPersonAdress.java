@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -36,6 +38,12 @@ public class LinkPersonAdress implements Serializable {
     @Basic(optional = false)
     @Column(name = "ID_P-A", nullable = false)
     private Integer idPA;
+    @JoinColumn(name = "Person", referencedColumnName = "ID_Person")
+    @ManyToOne(optional = false)
+    private Person idperson;
+    @JoinColumn(name = "Adress", referencedColumnName = "ID_Adress")
+    @ManyToOne(optional = false)
+    private Adress idadress;
     @Basic(optional = false)
     @Column(name = "Type", nullable = false, length = 255)
     private String type;
@@ -58,6 +66,22 @@ public class LinkPersonAdress implements Serializable {
 
     public void setIdPA(Integer idPA) {
         this.idPA = idPA;
+    }
+    
+    public Person getIdperson() {
+        return idperson;
+    }
+    
+    public void setIdperson(Person idperson) {
+        this.idperson = idperson;
+    }
+    
+    public Adress getAdress() {
+        return idadress;
+    }
+
+    public void setAdress(Adress idadress) {
+        this.idadress = idadress;
     }
 
     public String getType() {

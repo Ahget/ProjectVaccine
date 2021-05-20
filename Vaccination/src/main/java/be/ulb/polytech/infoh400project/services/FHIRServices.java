@@ -33,14 +33,16 @@ public class FHIRServices {
         idperson.setSurname(p.getNameFirstRep().getFamily());
         idperson.setDateofbirth(p.getBirthDate());
         System.out.println(p.getBirthDate());
+        
         String phoneNumber = " ";
         for (ContactPoint contact : p.getTelecom()){
             if(contact.getSystem().getSystem().equalsIgnoreCase("phone")){
                 phoneNumber = contact.getValue();                
             }
-        }
-        
+        }               
         idperson.setPhonenumber( phoneNumber);
+        
+        
         
         be.ulb.polytech.infoh400project.model.Patient pat = new be.ulb.polytech.infoh400project.model.Patient();
         pat.setIdperson(idperson);

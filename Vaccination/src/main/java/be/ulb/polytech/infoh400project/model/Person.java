@@ -70,8 +70,8 @@ public class Person implements Serializable{
     private List<Patient> patientList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idperson")
     private List<Doctor> doctorList;
-    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "idperson")          //il faut plutôt les link Person-Adress non?
-    //private List<Adress> AdressList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idperson")          //il faut plutôt les link Person-Adress non?
+    private List<LinkPersonAdress> LinkAdressList;
     
     
     public void Person(){
@@ -147,6 +147,14 @@ public class Person implements Serializable{
 
     public void setDoctorList(List<Doctor> doctorList) {
         this.doctorList = doctorList;
+    }
+    
+    public List<LinkPersonAdress> getLinkAdressList() {
+        return LinkAdressList;
+    }
+
+    public void setLinkAdressList(List<LinkPersonAdress> LinkAdressList) {
+        this.LinkAdressList = LinkAdressList;
     }
     
     @Override
