@@ -121,7 +121,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         jLabel5.setText("tel:");
 
-        jLabel6.setText("Age");
+        jLabel6.setText("DOB");
 
         jLabel7.setText("Adresse");
 
@@ -340,10 +340,11 @@ public class MainWindow extends javax.swing.JFrame {
                 /*prends la personne sélectionnée, récupère la liste de patient mappé par son id, récupère le premier élément (normalement il n'y en a qu'un de toute façon) 
                 qui est le patient correspondant */
                 person = selectedPerson;
-                //List<Vaccination> vaccinationList = selectedPerson.getPatientList().get(0).getVaccinationList();
+                List<Vaccination> vaccinationList = selectedPerson.getPatientList().get(0).getVaccinationList();
+                Patient patient1 = selectedPerson.getPatientList().get(0);
+                System.out.println(patient1);
                 
-                
-                //refreshVaccinationList(vaccinationList);             
+                refreshVaccinationList(vaccinationList);             
             } catch (NumberFormatException e) {
                 System.out.println("User input was not a number.");
             }   
