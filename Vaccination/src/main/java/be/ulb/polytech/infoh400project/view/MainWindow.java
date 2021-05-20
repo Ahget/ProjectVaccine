@@ -13,6 +13,8 @@ import be.ulb.polytech.infoh400project.controller.exceptions.NonexistentEntityEx
 import be.ulb.polytech.infoh400project.model.Patient;
 import be.ulb.polytech.infoh400project.model.Person;
 import be.ulb.polytech.infoh400project.model.Vaccination;
+import java.awt.event.MouseEvent;
+import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -59,7 +61,7 @@ public class MainWindow extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jListVaccinations = new javax.swing.JList<>();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        jTextAreaInfoVaccin = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -89,11 +91,17 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel1.setText("Numéro de registre National");
 
         jListVaccinations.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jListVaccinations.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jListVaccinationsMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jListVaccinations);
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane2.setViewportView(jTextArea1);
+        jTextAreaInfoVaccin.setEditable(false);
+        jTextAreaInfoVaccin.setColumns(20);
+        jTextAreaInfoVaccin.setRows(5);
+        jScrollPane2.setViewportView(jTextAreaInfoVaccin);
 
         jLabel2.setText("Info Vaccin");
 
@@ -121,7 +129,7 @@ public class MainWindow extends javax.swing.JFrame {
 
         jLabel5.setText("tel:");
 
-        jLabel6.setText("Age");
+        jLabel6.setText("DOB");
 
         jLabel7.setText("Adresse");
 
@@ -392,6 +400,36 @@ public class MainWindow extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_FhirSearchButtonActionPerformed
 
+    private void jListVaccinationsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jListVaccinationsMouseClicked
+        // TODO add your handling code here:
+        if (evt.getButton() == MouseEvent.BUTTON1 && jListVaccinations.getSelectedIndex() >= 0) {
+            EntityListModel model = (EntityListModel) jListVaccinations.getModel();
+            Vaccination selectedVaccination = (Vaccination) model.getList().get(jListVaccinations.getSelectedIndex());
+            
+            short vaccinationstateshort = selectedVaccination.getVaccinationState();
+            String vaccinationstatestring = "N/A";
+            if(vaccinationstateshort == 0){
+                vaccinationstatestring = "En attente";
+            }            
+            else if(vaccinationstateshort == 1){
+                vaccinationstatestring = "Fait";
+            }          
+            
+            jTextAreaInfoVaccin.setText(
+                    "Vaccin : " + selectedVaccination.getIdvaccin() +
+                    "\nDate : " + selectedVaccination.getDataTime() +
+                    "\nMédecin : " + selectedVaccination.getIddoctor() +
+                    "\nEtat : " + vaccinationstatestring
+                      
+            );
+                
+
+                
+            }
+            
+        
+    }//GEN-LAST:event_jListVaccinationsMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -446,7 +484,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JList<String> jListVaccinations;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea jTextAreaInfoVaccin;
     private javax.swing.JTextField nomTextField;
     private javax.swing.JTextField prenomTextField;
     private javax.swing.JButton saveButton;

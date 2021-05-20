@@ -90,7 +90,7 @@ public class Vaccin implements Serializable {
 
     @Override
     public String toString() {
-        return iDVaccin + " " + nameVaccin;
+        return nameVaccin;
     }
     
 }

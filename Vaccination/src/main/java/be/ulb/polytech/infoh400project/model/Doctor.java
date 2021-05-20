@@ -79,7 +79,7 @@ public class Doctor implements Serializable {
 
     @Override
     public String toString() {
-        return "be.ulb.polytech.infoh400project.model.Doctor[ iDDoctor=" + iDDoctor + " ]";
+        return idperson.getName() + iDDoctor;
     }
     
 }
