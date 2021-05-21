@@ -82,6 +82,8 @@ public class MainWindow extends javax.swing.JFrame {
         FhirSearchButton = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
         jLabel8.setVisible(false);
+        NoPatient = new javax.swing.JLabel();
+        NoPatient.setVisible(false);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -164,6 +166,9 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel8.setForeground(new java.awt.Color(255, 51, 51));
         jLabel8.setText("No patient selected");
 
+        NoPatient.setForeground(new java.awt.Color(255, 51, 51));
+        NoPatient.setText("Patient not in database");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -181,12 +186,14 @@ public class MainWindow extends javax.swing.JFrame {
                         .addGap(64, 64, 64)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
+                                .addGap(1, 1, 1)
+                                .addComponent(jButton4))
+                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(idField, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(30, 30, 30)
-                                .addComponent(selectPatientButton))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(1, 1, 1)
-                                .addComponent(jButton4))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(selectPatientButton, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(NoPatient, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(28, 28, 28)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -216,7 +223,7 @@ public class MainWindow extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(ageTextField, javax.swing.GroupLayout.DEFAULT_SIZE, 130, Short.MAX_VALUE)
                                     .addComponent(telTextField))))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 51, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 408, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(24, 24, 24)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -248,7 +255,9 @@ public class MainWindow extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(idField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(selectPatientButton))
-                                .addGap(45, 45, 45)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(NoPatient)
+                                .addGap(25, 25, 25)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jLabel3)
                                     .addComponent(nomTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -359,20 +368,28 @@ public class MainWindow extends javax.swing.JFrame {
                 selectedPerson = personCtrl.findPerson(selectedId);//Patient selectedPatient = selectedPerson.getPatientList().get(0) ; 
                 /*prends la personne sélectionnée, récupère la liste de patient mappé par son id, récupère le premier élément (normalement il n'y en a qu'un de toute façon) 
                 qui est le patient correspondant */
-                person = selectedPerson;
-                List<Vaccination> vaccinationList = selectedPerson.getPatientList().get(0).getVaccinationList();
-                Patient patient1 = selectedPerson.getPatientList().get(0);
-                System.out.println(patient1);
+                if (selectedPerson == null){
+                    NoPatient.setVisible(true);
+                }
+                else {
+                    NoPatient.setVisible(false);
+                    System.out.println(selectedPerson);
+                    person = selectedPerson;
+                    List<Vaccination> vaccinationList = selectedPerson.getPatientList().get(0).getVaccinationList();
+                    Patient patient1 = selectedPerson.getPatientList().get(0);
+                    System.out.println(patient1);
                 
-                refreshVaccinationList(vaccinationList);             
-            } catch (NumberFormatException e) {
-                System.out.println("User input was not a number.");
-            }   
-            
-            nomTextField.setText(person.getSurname());
-            prenomTextField.setText(person.getName());
-            ageTextField.setText(fmt.format(person.getDateofbirth()));
-            telTextField.setText(person.getPhonenumber());
+                    refreshVaccinationList(vaccinationList);  
+                }           
+                } catch (NumberFormatException e) {
+                    System.out.println("User input was not a number.");
+                }   
+
+                nomTextField.setText(person.getSurname());
+                prenomTextField.setText(person.getName());
+                ageTextField.setText(fmt.format(person.getDateofbirth()));
+                telTextField.setText(person.getPhonenumber());
+                
         }
         
         
@@ -495,6 +512,7 @@ public class MainWindow extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton FhirSearchButton;
     private javax.swing.JButton Meeting;
+    private javax.swing.JLabel NoPatient;
     private javax.swing.JTextField adresseTextField;
     private javax.swing.JTextField ageTextField;
     private javax.swing.JTextField idField;
